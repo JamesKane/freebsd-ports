@@ -6,7 +6,7 @@ MAINTAINER=	kanej1973@gmail.com
 COMMENT=	DRM driver for Qualcomm Adreno GPUs (msm)
 WWW=		https://github.com/JamesKane/drm-msm-kmod
 
-LICENSE=	BSD2CLAUSE GPLv2
+LICENSE=	BSD2CLAUSE GPLv2 MIT
 LICENSE_COMB=	multi
 
 ONLY_FOR_ARCHS=	aarch64
@@ -20,7 +20,7 @@ USES=		kmod uidfix
 
 USE_GITHUB=	yes
 GH_ACCOUNT=	JamesKane
-GH_TAGNAME=	a7c37ac
+GH_TAGNAME=	fe56aa2
 GH_TUPLE=	freebsd:drm-kmod:${DRM_KMOD_GH_TAGNAME}:drm
 
 .include "${.CURDIR}/../drm-latest-kmod/Makefile.version"
