@@ -1,27 +1,56 @@
 # Describe DRM devices that are not on PCI, whose kernel bus ID is
 # "platform:<name>", as platform devices; Mesa's EGL needs them to be
-# described.  Do not return device nodes that do not exist.
+# described.  Do not return device nodes that do not exist.  Find the hw.dri
+# slot of a node by its number.
 #
 --- xf86drm.c.orig
 +++ xf86drm.c
-@@ -3494,6 +3494,11 @@
-     id -= drmGetMinorBase(nodetype);
+@@ -3495,6 +3495,11 @@
      snprintf(name, sizeof(name), DRM_DIR_NAME "/%s%d", mname,
           id + drmGetMinorBase(type));
-+
+ 
 +    /* Not every device has every node type, e.g. KMS-only drivers have no
 +     * render node. Report the node only if it exists, as on Linux. */
 +    if (stat(name, &sbuf) != 0)
 +        return NULL;
- 
++
      return strdup(name);
  #else
-@@ -3617,7 +3622,54 @@
+     struct stat sbuf;
+@@ -3617,7 +3622,69 @@
      return -EINVAL;
  }
  #endif
 +
 +#ifdef __FreeBSD__
++/*
++ * The hw.dri slot of the device of node "id" of the given type.  Kernels
++ * that give each slot the numbers of its nodes are searched; for older ones,
++ * guess that card N and renderD(128+N) are hw.dri.N.
++ */
++static int get_sysctl_slot(int id, int type)
++{
++    char sysctl_name[32];
++    const char *leaf;
++    size_t len;
++    int i, node, found;
++
++    leaf = type == DRM_NODE_RENDER ? "render" : "primary";
++    found = 0;
++    for (i = 0; i < 10; i++) {
++        snprintf(sysctl_name, sizeof(sysctl_name), "hw.dri.%d.%s", i, leaf);
++        len = sizeof(node);
++        if (sysctlbyname(sysctl_name, &node, &len, NULL, 0) != 0)
++            continue;
++        if (node == id)
++            return i;
++        found = 1;
++    }
++    if (found)
++        return -1;
++    return type == DRM_NODE_RENDER ? id - 128 : id;
++}
+ 
 +/* The bus ID the kernel gives the device of a node, from hw.dri.N.busid. */
 +static int get_sysctl_busid(int maj, int min, char *busid, size_t len)
 +{
@@ -29,7 +58,7 @@
 +    char sysctl_name[16];
 +    int id, type;
 +    unsigned int rdev;
- 
++
 +    rdev = makedev(maj, min);
 +    if (!devname_r(rdev, S_IFCHR, dname, sizeof(dname)))
 +      return -EINVAL;
@@ -40,20 +69,7 @@
 +    if (type == -1)
 +        return -EINVAL;
 +
-+    /* BUG: This above section is iffy, since it mandates that a driver will
-+     * create both card and render node.
-+     * If it does not, the next DRM device will create card#X and
-+     * renderD#(128+X)-1.
-+     * This is a possibility in FreeBSD but for now there is no good way for
-+     * obtaining the info.
-+     */
-+    switch (type) {
-+    case DRM_NODE_PRIMARY:
-+         break;
-+    case DRM_NODE_RENDER:
-+         id -= 128;
-+         break;
-+    }
++    id = get_sysctl_slot(id, type);
 +    if (id < 0)
 +        return -EINVAL;
 +
@@ -71,7 +87,7 @@
  static int drmParseSubsystemType(int maj, int min)
  {
  #ifdef __linux__
-@@ -3639,8 +3691,17 @@
+@@ -3639,7 +3706,16 @@
              return DRM_BUS_VIRTIO;
       }
      return subsystem_type;
@@ -84,13 +100,12 @@
 +        strncmp(busid, FREEBSD_PLATFORM_BUSID,
 +                strlen(FREEBSD_PLATFORM_BUSID)) == 0)
 +        return DRM_BUS_PLATFORM;
-     return DRM_BUS_PCI;
-+#elif defined(__OpenBSD__) || defined(__DragonFly__)
 +    return DRM_BUS_PCI;
++#elif defined(__OpenBSD__) || defined(__DragonFly__)
+     return DRM_BUS_PCI;
  #else
  #warning "Missing implementation of drmParseSubsystemType"
-     return -EINVAL;
-@@ -3668,46 +3729,13 @@
+@@ -3668,44 +3744,11 @@
  #ifdef __FreeBSD__
  static int get_sysctl_pci_bus_info(int maj, int min, drmPciBusInfoPtr info)
  {
@@ -105,9 +120,8 @@
  
 -    rdev = makedev(maj, min);
 -    if (!devname_r(rdev, S_IFCHR, dname, sizeof(dname)))
-+    if (get_sysctl_busid(maj, min, sysctl_val, sizeof(sysctl_val)))
-       return -EINVAL;
- 
+-      return -EINVAL;
+-
 -    if (sscanf(dname, "drm/%d\n", &id) != 1)
 -        return -EINVAL;
 -    type = drmGetMinorType(maj, min);
@@ -135,12 +149,11 @@
 -      return -EINVAL;
 -    sysctl_len = sizeof(sysctl_val);
 -    if (sysctlbyname(sysctl_name, sysctl_val, &sysctl_len, NULL, 0))
--      return -EINVAL;
--
-     #define bus_fmt "pci:%04x:%02x:%02x.%u"
++    if (get_sysctl_busid(maj, min, sysctl_val, sizeof(sysctl_val)))
+       return -EINVAL;
  
-     nelem = sscanf(sysctl_val, bus_fmt, &domain, &bus, &dev, &func);
-@@ -4319,6 +4347,20 @@
+     #define bus_fmt "pci:%04x:%02x:%02x.%u"
+@@ -4319,6 +4362,20 @@
      free(name);
  
      return 0;
@@ -161,7 +174,7 @@
  #else
  #warning "Missing implementation of drmParseOFBusInfo"
      return -EINVAL;
-@@ -4379,6 +4421,25 @@
+@@ -4379,6 +4436,25 @@
  
      free(*compatible);
      return err;
