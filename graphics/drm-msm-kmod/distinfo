@@ -1,0 +1,5 @@
+TIMESTAMP = 1790716181
+SHA256 (JamesKane-drm-msm-kmod-0.0.20260929-61d23e4_GH0.tar.gz) = 713282c975ef98873bd4b9c7bbb17d87c8fc597211769c9dd50e6d4392e1b648
+SIZE (JamesKane-drm-msm-kmod-0.0.20260929-61d23e4_GH0.tar.gz) = 942080
+SHA256 (freebsd-drm-kmod-drm_v6.12.85_3_GH0.tar.gz) = 664bc6d77ddc0e103d523563a804644aca14b46d8a3c1af268ea79846139ef60
+SIZE (freebsd-drm-kmod-drm_v6.12.85_3_GH0.tar.gz) = 44076233
