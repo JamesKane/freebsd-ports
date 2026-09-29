@@ -8,7 +8,7 @@
  #include <sys/types.h>
 +#if defined(__linux__)
  #include <sys/syscall.h>
-+#define fd_gettid() fd_gettid()
++#define fd_gettid() ((pid_t)syscall(SYS_gettid))
 +#elif defined(__FreeBSD__)
 +#include <pthread_np.h>
 +#define fd_gettid() ((pid_t)pthread_getthreadid_np())
@@ -20,7 +20,7 @@
     do {                                                                        \
        if (FD_DBG(MSGS))                                                        \
 -         mesa_logd("%5d: %s:%d: " fmt, ((pid_t)syscall(SYS_gettid)),           \
-+         mesa_logd("%5d: %s:%d: " fmt, fd_gettid(),           \
++         mesa_logd("%5d: %s:%d: " fmt, fd_gettid(),                            \
                                          __func__, __LINE__,                    \
                                          ##__VA_ARGS__);                        \
     } while (0)
