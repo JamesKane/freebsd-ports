@@ -1,5 +1,6 @@
 PORTNAME=	mesa-libs
 PORTVERSION=	${MESAVERSION}
+PORTREVISION=	1
 CATEGORIES=	graphics
 
 COMMENT=	OpenGL libraries that support GLX and EGL clients
@@ -47,10 +48,13 @@ LDFLAGS_i386=	-Wl,-znotext
 # a real gallium driver set so install_megadrivers actually ships the lib;
 # the per-driver lib/dri/*_dri.so shims that fall out of this build are
 # stripped in post-install (they belong to graphics/mesa-dri).
-GALLIUM_DRIVERS=	crocus i915 iris llvmpipe panfrost r300 r600 radeonsi \
-			svga virgl zink
+GALLIUM_DRIVERS=	crocus freedreno i915 iris llvmpipe panfrost r300 r600 \
+			radeonsi svga virgl zink
 .if ${ARCH} != amd64 && ${ARCH} != i386 && ${ARCH} != x86_64
 GALLIUM_DRIVERS:=	${GALLIUM_DRIVERS:Ncrocus:Ni915:Niris:Nsvga}
+.endif
+.if ${ARCH} != aarch64
+GALLIUM_DRIVERS:=	${GALLIUM_DRIVERS:Nfreedreno}
 .endif
 .if ${ARCH} == armv7
 # These require llvm to be compiled with the amdgpu backend, which is not default on armv7

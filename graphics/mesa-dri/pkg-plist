@@ -15,6 +15,7 @@
 %%X11%%lib/dri/imx-lcdif_dri.so
 %%X11%%lib/dri/ingenic-drm_dri.so
 %%X11%%%%iris%%lib/dri/iris_dri.so
+%%X11%%%%freedreno%%lib/dri/kgsl_dri.so
 %%X11%%lib/dri/kirin_dri.so
 %%X11%%%%llvmpipe%%lib/dri/kms_swrast_dri.so
 %%X11%%lib/dri/komeda_dri.so
@@ -24,6 +25,7 @@
 %%X11%%lib/dri/mediatek_dri.so
 %%X11%%lib/dri/meson_dri.so
 %%X11%%lib/dri/mi0283qt_dri.so
+%%X11%%%%freedreno%%lib/dri/msm_dri.so
 %%X11%%lib/dri/mxsfb-drm_dri.so
 %%X11%%lib/dri/panel-mipi-dbi_dri.so
 %%X11%%%%panfrost%%lib/dri/panfrost_dri.so
@@ -69,6 +71,7 @@ lib/dri/virtio_gpu_drv_video.so
 @comment lib/libgbm.so
 @comment lib/libgbm.so.1
 @comment lib/libgbm.so.1.0.0
+%%turnip%%lib/libvulkan_freedreno.so
 %%anv%%lib/libvulkan_intel.so
 %%swrast_vk%%lib/libvulkan_lvp.so
 %%radv%%lib/libvulkan_radeon.so
@@ -77,15 +80,18 @@ lib/dri/virtio_gpu_drv_video.so
 %%iris%%share/drirc.d/00-iris-defaults.conf
 %%X11%%%%swrast_vk%%share/drirc.d/00-lavapipe-defaults.conf
 share/drirc.d/00-mesa-defaults.conf
+%%freedreno%%share/drirc.d/00-msm-defaults.conf
 %%X11%%%%panfrost%%share/drirc.d/00-panfrost-defaults.conf
 %%r300%%share/drirc.d/00-r300-defaults.conf
 %%r600%%share/drirc.d/00-r600-defaults.conf
 %%radeonsi%%share/drirc.d/00-radeonsi-defaults.conf
 %%radv%%share/drirc.d/00-radv-defaults.conf
+%%turnip%%share/drirc.d/00-turnip-defaults.conf
 %%X11%%share/drirc.d/00-virtio_gpu-defaults.conf
 %%svga%%share/drirc.d/00-vmwgfx-defaults.conf
 %%X11%%share/drirc.d/00-zink-defaults.conf
 share/drirc.d/01-freebsd.conf
+%%turnip%%share/vulkan/icd.d/freedreno_icd.%%ARCH%%.json
 %%anv%%share/vulkan/icd.d/intel_icd.%%ARCH%%.json
 %%swrast_vk%%share/vulkan/icd.d/lvp_icd.%%ARCH%%.json
 %%radv%%share/vulkan/icd.d/radeon_icd.%%ARCH%%.json
