@@ -1,5 +1,6 @@
 PORTNAME=	gpu-firmware-kmod
 PORTVERSION=	20260519
+PORTREVISION=	1
 PORTEPOCH=	1
 CATEGORIES=	graphics
 
@@ -203,6 +204,12 @@ RUN_DEPENDS+=	gpu-firmware-amd-kmod-aldebaran>0:graphics/gpu-firmware-amd-kmod@a
 		gpu-firmware-amd-kmod-vpe-6-1-1>0:graphics/gpu-firmware-amd-kmod@vpe_6_1_1 \
 		gpu-firmware-amd-kmod-vpe-6-1-3>0:graphics/gpu-firmware-amd-kmod@vpe_6_1_3 \
 		gpu-firmware-amd-kmod-yellow-carp>0:graphics/gpu-firmware-amd-kmod@yellow_carp
+.endif
+
+.if ${ARCH} == aarch64
+# make -C graphics/gpu-firmware-qcom-kmod -V '${FLAVORS:O:C/.*/gpu-firmware-qcom-kmod-&>0:graphics\/gpu-firmware-qcom-kmod@& \\!/}' | tr '!' '\n'
+RUN_DEPENDS+=	gpu-firmware-qcom-kmod-a660>0:graphics/gpu-firmware-qcom-kmod@a660 \
+		gpu-firmware-qcom-kmod-sc8280xp>0:graphics/gpu-firmware-qcom-kmod@sc8280xp
 .endif
 
 .include <bsd.port.post.mk>

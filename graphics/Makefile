@@ -314,6 +314,7 @@
     SUBDIR += gpu-firmware-amd-kmod
     SUBDIR += gpu-firmware-intel-kmod
     SUBDIR += gpu-firmware-kmod
+    SUBDIR += gpu-firmware-qcom-kmod
     SUBDIR += gpu-firmware-radeon-kmod
     SUBDIR += gpxsee
     SUBDIR += gracula
