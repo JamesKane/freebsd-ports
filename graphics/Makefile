@@ -166,6 +166,7 @@
     SUBDIR += drm-66-kmod
     SUBDIR += drm-kmod
     SUBDIR += drm-latest-kmod
+    SUBDIR += drm-msm-kmod
     SUBDIR += drm_info
     SUBDIR += dspdfviewer
     SUBDIR += dssim

@@ -1,0 +1,7 @@
+msm is the Linux DRM driver for Qualcomm Adreno GPUs, built as a FreeBSD
+kernel module against drm-kmod.  It attaches to the GPU the firmware's
+ACPI tables describe, and is loaded at boot by devmatch(8).  It provides
+the render node that Mesa's freedreno (OpenGL) and Turnip (Vulkan)
+drivers use; it does not drive displays.
+
+Supported: SC8280XP (Snapdragon 8cx Gen 3, Adreno 690).

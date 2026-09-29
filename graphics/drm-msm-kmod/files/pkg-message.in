@@ -1,0 +1,21 @@
+[
+{ type: install
+  message: <<EOM
+msm is loaded at boot for the Adreno GPU.  It renders only: displays
+stay on the framebuffer the boot firmware set up, through sysfbdrm from
+drm-kmod, which has to be loaded too, through kld_list in /etc/rc.conf:
+
+kld_list="sysfbdrm"
+
+Mesa then renders with the GPU on that display, for example for Wayland
+compositors, without further configuration.
+
+Please ensure that all users requiring graphics are members of the
+"video" group.
+
+Please note that this package was built for %%OPSYS%% %%OSREL%%.
+If this is not your current running version, please rebuild
+it from ports to prevent panics when loading the module.
+EOM
+}
+]
