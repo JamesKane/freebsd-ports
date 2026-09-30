@@ -1,0 +1,17 @@
+#!/bin/sh
+#
+# power_profile hook for msm(4): the GPU's clock follows its load, but for
+# performance stays at the fastest.  The kernel environment carries the
+# choice to msm.ko when it loads later.
+
+case "$1" in
+performance)
+	devfreq=0
+	;;
+*)
+	devfreq=1
+	;;
+esac
+kenv -q hw.msm.devfreq=${devfreq} > /dev/null
+sysctl -q hw.msm.devfreq=${devfreq} > /dev/null
+exit 0

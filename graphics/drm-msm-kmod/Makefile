@@ -1,6 +1,6 @@
 PORTNAME=	drm-msm-kmod
 DISTVERSION=	0.0.20260929
-PORTREVISION=	11
+PORTREVISION=	12
 CATEGORIES=	graphics kld
 
 MAINTAINER=	kanej1973@gmail.com
@@ -32,10 +32,16 @@ SUB_LIST=	OPSYS=${OPSYS} OSREL=${OSREL}
 MAKE_ENV+=	DRMKMOD=${WRKSRC_drm} \
 		MAKEOBJDIRPREFIX=${WRKSRC}/obj
 
-PLIST_FILES=	${KMODDIR}/msm.ko
+PLIST_FILES=	${KMODDIR}/msm.ko \
+		etc/power_profile.d/msm
 
 pre-build:
 	${MKDIR} ${WRKSRC}/obj
 	(cd ${WRKSRC} ; ${SETENV} ${MAKE_ENV} ${MAKE_CMD} obj)
+
+post-install:
+	${MKDIR} ${STAGEDIR}${PREFIX}/etc/power_profile.d
+	${INSTALL_SCRIPT} ${FILESDIR}/power_profile.msm \
+		${STAGEDIR}${PREFIX}/etc/power_profile.d/msm
 
 .include <bsd.port.mk>
