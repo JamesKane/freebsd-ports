@@ -1,0 +1,5 @@
+Firmware for the DSPs of Qualcomm Snapdragon systems-on-chip, as
+firmware(9) modules for qcom_adsp(4), from linux-firmware:
+
+- the Radxa Dragon Q8B's audio DSP (ADSP), which runs the board's fan
+  control; without it the fan runs at full speed.

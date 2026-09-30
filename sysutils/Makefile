@@ -1173,6 +1173,7 @@
     SUBDIR += py-tmuxp
     SUBDIR += py-uptime
     SUBDIR += qchroot
+    SUBDIR += qcom-dsp-firmware-kmod
     SUBDIR += qdirstat
     SUBDIR += qflipper
     SUBDIR += qjail
