@@ -1,6 +1,6 @@
 PORTNAME=	libdrm
 PORTVERSION=	2.4.134
-PORTREVISION=	3
+PORTREVISION=	4
 PORTEPOCH=	1
 CATEGORIES=	graphics
 MASTER_SITES=	https://dri.freedesktop.org/libdrm/
