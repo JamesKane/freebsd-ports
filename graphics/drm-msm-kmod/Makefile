@@ -1,6 +1,6 @@
 PORTNAME=	drm-msm-kmod
 DISTVERSION=	0.0.20260929
-PORTREVISION=	14
+PORTREVISION=	15
 CATEGORIES=	graphics kld
 
 MAINTAINER=	kanej1973@gmail.com
@@ -21,7 +21,7 @@ USES=		kmod uidfix
 
 USE_GITHUB=	yes
 GH_ACCOUNT=	JamesKane
-GH_TAGNAME=	700b9ba
+GH_TAGNAME=	0f23f29
 GH_TUPLE=	freebsd:drm-kmod:${DRM_KMOD_GH_TAGNAME}:drm
 
 .include "${.CURDIR}/../drm-latest-kmod/Makefile.version"
